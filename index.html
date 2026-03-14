@@ -12,6 +12,7 @@
                 :root {
     --primary-green: #00D632;
     --dark-green: #00b329;
+    --light-green: #e8f5e9;
     --bg-gray: #f0f2f5;
     --text-dark: #0a0a0a;
     --text-gray: #888888;
@@ -21,32 +22,59 @@
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
+/* Phone Container */
 .phone-frame {
     width: 100%;
-    max-width: 400px;
-    height: 100%;
-    max-height: 850px;
-    background-color: #fff;
+    max-width: 430px;
+    height: 100vh;
+    max-height: 932px;
+    background: #fff;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
+@media (min-width: 431px) {
+    .phone-frame {
+        height: 90vh;
+        max-height: 850px;
+        border-radius: 40px;
+        border: 8px solid #2a2a2a;
+        box-shadow: 0 0 50px rgba(0, 214, 50, 0.1);
+    }
+}
+
+/* Full Screen Mode */
+.phone-frame.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    border: none;
+    z-index: 9999;
+}
+
+/* Screens */
 .screen {
     position: absolute;
     top: 0;
@@ -55,7 +83,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s;
     background: #fff;
     z-index: 10;
 }
@@ -74,35 +102,68 @@ body {
     z-index: 20;
 }
 
+/* Home Screen */
 #home-screen {
-    background-color: var(--primary-green);
+    background: linear-gradient(180deg, var(--primary-green) 0%, var(--dark-green) 100%);
     color: white;
     justify-content: space-between;
-    padding: 20px;
+    padding: 50px 20px 100px;
 }
 
 .home-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .profile-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255,255,255,0.2);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.avatar-circle.large {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
 }
 
 .balance-display {
-    font-size: 20px;
-    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.balance-label {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+}
+
+#home-balance {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.settings-icon {
+    font-size: 24px;
+    cursor: pointer;
     opacity: 0.8;
+    padding: 5px;
 }
 
 .amount-container {
@@ -110,68 +171,148 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 64px;
+    font-size: 72px;
     font-weight: 700;
-    letter-spacing: -2px;
+    letter-spacing: -3px;
 }
 
 .currency-symbol {
-    font-size: 40px;
-    margin-right: 5px;
-    margin-top: 10px;
+    font-size: 48px;
+    margin-right: 8px;
+    margin-top: 15px;
+    opacity: 0.9;
 }
 
 .keypad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    padding-bottom: 20px;
+    gap: 12px;
+    padding: 20px 0;
 }
 
 .key {
     background: rgba(255,255,255,0.15);
     border: none;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    font-size: 28px;
+    width: 75px;
+    height: 75px;
+    font-size: 30px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     margin: 0 auto;
-    transition: background 0.1s;
+    transition: all 0.15s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .key:active {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.35);
+    transform: scale(0.95);
 }
 
 .key.action-key {
     background: transparent;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
+    border-radius: 20px;
+    width: auto;
+    padding: 0 20px;
 }
 
 .home-actions {
     display: flex;
     justify-content: space-between;
-    padding: 0 20px 30px 20px;
+    gap: 15px;
+    padding-bottom: 20px;
 }
 
 .action-btn {
     background: rgba(255,255,255,0.2);
     border: none;
-    padding: 15px 30px;
-    border-radius: 30px;
+    padding: 16px 24px;
+    border-radius: 35px;
     color: white;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     cursor: pointer;
-    width: 45%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
+.action-btn:active {
+    background: rgba(255,255,255,0.35);
+    transform: scale(0.98);
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: white;
+}
+
+.nav-item span:first-child {
+    font-size: 22px;
+}
+
+/* Full Screen Button */
+.fullscreen-btn {
+    position: absolute;
+    top: 15px;
+    right: 60px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+}
+
+.fullscreen-btn:active {
+    background: rgba(255,255,255,0.35);
+}
+
+/* Payment Screen */
 #payment-screen {
     background-color: #fff;
 }
@@ -183,6 +324,23 @@ body {
     padding: 15px 20px;
     border-bottom: 1px solid var(--border-color);
     height: 60px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 50;
+}
+
+.back-btn {
+    background: #f0f0f0;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pay-amount {
@@ -195,11 +353,12 @@ body {
     background-color: var(--primary-green);
     color: white;
     border: none;
-    padding: 8px 24px;
-    border-radius: 20px;
+    padding: 10px 28px;
+    border-radius: 25px;
     font-weight: 600;
     font-size: 16px;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
 .pay-btn-header:disabled {
@@ -207,28 +366,33 @@ body {
     cursor: not-allowed;
 }
 
+.pay-btn-header:not(:disabled):active {
+    transform: scale(0.95);
+}
+
 .input-group {
     padding: 20px;
+    background: #fff;
 }
 
 .input-row {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    padding: 18px 0;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
 }
 
 .input-label {
-    width: 40px;
+    width: 45px;
     font-weight: 600;
-    color: var(--text-gray);
-    font-size: 16px;
+    color: var(--text-dark);
+    font-size: 17px;
 }
 
 .input-field {
     border: none;
-    font-size: 16px;
+    font-size: 17px;
     flex-grow: 1;
     outline: none;
     color: var(--text-dark);
@@ -244,38 +408,39 @@ body {
     align-items: center;
     font-size: 14px;
     color: var(--text-gray);
-    margin-top: 10px;
+    padding: 15px 0;
 }
 
 .cash-tag {
     background: var(--primary-green);
     color: white;
-    width: 16px;
-    height: 16px;
-    border-radius: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
-    margin-right: 8px;
+    font-size: 11px;
+    margin-right: 10px;
     font-weight: bold;
 }
 
 .suggested-list {
     padding: 0 20px;
-    overflow-y: auto;
     flex-grow: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .suggested-title {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-gray);
-    margin-bottom: 15px;
-    margin-top: 10px;
+    padding: 20px 0 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid var(--border-color);
 }
 
 .add-contact-btn {
@@ -283,40 +448,51 @@ body {
     border: none;
     color: var(--primary-green);
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
+    padding: 5px 10px;
 }
 
 .contact-item {
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    padding: 12px 0;
     cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 12px;
+    margin: 0 -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.contact-item:active {
+    background: #f5f5f5;
 }
 
 .contact-avatar {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background-color: #eee;
     margin-right: 15px;
     overflow: hidden;
     flex-shrink: 0;
-}
-
-.contact-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
 }
 
 .contact-info {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 .contact-name {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--text-dark);
 }
@@ -327,19 +503,25 @@ body {
     margin-top: 2px;
 }
 
+/* Processing Screen */
 #processing-screen {
     background: white;
     justify-content: center;
     align-items: center;
 }
 
+.processing-content {
+    text-align: center;
+}
+
 .spinner {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border: 4px solid #f3f3f3;
     border-top: 4px solid var(--primary-green);
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
 }
 
 @keyframes spin {
@@ -347,26 +529,38 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+.processing-text {
+    color: var(--text-gray);
+    font-size: 17px;
+}
+
+/* Success Screen */
 #success-screen {
     background: white;
-    padding: 40px 20px;
+    padding: 40px 25px;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
+.success-content {
+    width: 100%;
+    max-width: 320px;
+}
+
 .success-icon {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     background: var(--primary-green);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
     color: white;
-    font-size: 40px;
-    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 45px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0, 214, 50, 0.3);
 }
 
 @keyframes popIn {
@@ -375,16 +569,42 @@ body {
 }
 
 .success-text {
-    font-size: 20px;
+    font-size: 22px;
     color: var(--text-dark);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     line-height: 1.4;
+    font-weight: 500;
+}
+
+#success-amount, #success-recipient {
+    font-weight: 700;
+    color: var(--primary-green);
 }
 
 .success-subtext {
     color: var(--text-gray);
     font-size: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
+}
+
+.success-actions {
+    margin-bottom: 25px;
+}
+
+.share-btn {
+    background: #f5f5f5;
+    color: var(--text-dark);
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .done-btn {
@@ -397,16 +617,176 @@ body {
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 214, 50, 0.3);
 }
 
+.done-btn:active {
+    transform: scale(0.98);
+}
+
+/* Keyboard Spacer */
 .keyboard-spacer {
     height: 0px;
-    transition: height 0.3s;
+    transition: height 0.25s ease;
     background: #fff;
 }
 
 .keyboard-active .keyboard-spacer {
-    height: 250px;
+    height: 280px;
+}
+
+/* Toast Notification */
+.toast {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(0, 0, 0, 0.85);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 200;
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Menu Modal */
+.menu-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.menu-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.menu-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 320px;
+    height: 100%;
+    background: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    padding-top: 60px;
+}
+
+.menu-modal.active .menu-content {
+    transform: translateX(0);
+}
+
+.menu-header {
+    display: flex;
+    align-items: center;
+    padding: 0 25px 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-profile {
+    margin-right: 15px;
+}
+
+.menu-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.menu-handle {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-top: 3px;
+}
+
+.menu-items {
+    padding: 15px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 25px;
+    cursor: pointer;
+    transition: background 0.15s;
+    gap: 15px;
+}
+
+.menu-item:active {
+    background: #f5f5f5;
+}
+
+.menu-item span:first-child {
+    font-size: 20px;
+    width: 25px;
+}
+
+.menu-item span:last-child {
+    font-size: 17px;
+    color: var(--text-dark);
+}
+
+/* Scrollbar Styling */
+.suggested-list::-webkit-scrollbar {
+    width: 0px;
+}
+
+.suggested-list {
+    scrollbar-width: none;
+}
+
+/* Home Indicator */
+.home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    z-index: 100;
+}
+
+#home-screen .home-indicator {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 
@@ -417,8 +797,12 @@ body {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Payment App Clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#00D632">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>CashApp Clone</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -428,8 +812,14 @@ body {
         <!-- HOME SCREEN -->
         <div id="home-screen" class="screen active">
             <div class="home-header">
-                <div class="profile-icon">👤</div>
-                <div class="balance-display" id="home-balance">$399,199.00</div>
+                <div class="profile-icon" onclick="toggleMenu()">
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">F</div>
+                </div>
+                <div class="balance-display">
+                    <span class="balance-label">Cash Balance</span>
+                    <span id="home-balance">$399,199.00</span>
+                </div>
+                <div class="settings-icon" onclick="toggleMenu()">⋮</div>
             </div>
 
             <div class="amount-container">
@@ -453,14 +843,44 @@ body {
             </div>
 
             <div class="home-actions">
-                <button class="action-btn">Request</button>
-                <button class="action-btn" onclick="goToPayment()">Pay</button>
+                <button class="action-btn request-btn">
+                    <span>📥</span>
+                    <span>Request</span>
+                </button>
+                <button class="action-btn pay-btn" onclick="goToPayment()">
+                    <span>💸</span>
+                    <span>Pay</span>
+                </button>
             </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active">
+                    <span>💰</span>
+                    <span>Money</span>
+                </div>
+                <div class="nav-item">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item">
+                    <span>📊</span>
+                    <span>Activity</span>
+                </div>
+                <div class="nav-item">
+                    <span>💳</span>
+                    <span>Card</span>
+                </div>
+            </div>
+
+            <!-- Full Screen Button -->
+            <button class="fullscreen-btn" onclick="toggleFullScreen()">⛶</button>
         </div>
 
         <!-- PAYMENT SCREEN -->
         <div id="payment-screen" class="screen hidden">
             <div class="pay-header">
+                <button class="back-btn" onclick="goBack()">✕</button>
                 <div class="pay-amount" id="pay-header-amount">$0</div>
                 <button class="pay-btn-header" id="confirm-pay-btn" onclick="processPayment()" disabled>Pay</button>
             </div>
@@ -468,11 +888,11 @@ body {
             <div class="input-group">
                 <div class="input-row">
                     <span class="input-label">To</span>
-                    <input type="text" class="input-field" id="recipient-input" placeholder="$Name, $Cashtag, Phone, Email" oninput="handleRecipientInput()">
+                    <input type="text" class="input-field" id="recipient-input" placeholder="$Name, $Cashtag, Phone, Email" oninput="handleRecipientInput()" autocomplete="off">
                 </div>
                 <div class="input-row">
                     <span class="input-label">For</span>
-                    <input type="text" class="input-field" placeholder="Note (optional)" value="shere like">
+                    <input type="text" class="input-field" placeholder="Note (optional)" value="shere like" autocomplete="off">
                 </div>
                 <div class="use-balance">
                     <span class="cash-tag">$</span>
@@ -492,15 +912,72 @@ body {
 
         <!-- PROCESSING SCREEN -->
         <div id="processing-screen" class="screen hidden">
-            <div class="spinner"></div>
+            <div class="processing-content">
+                <div class="spinner"></div>
+                <p class="processing-text">Processing payment...</p>
+            </div>
         </div>
 
         <!-- SUCCESS SCREEN -->
         <div id="success-screen" class="screen hidden">
-            <div class="success-icon">✓</div>
-            <div class="success-text">You sent <span id="success-amount" style="font-weight:bold;"></span> to <span id="success-recipient" style="font-weight:bold;"></span></div>
-            <div class="success-subtext">Available in their account instantly</div>
-            <button class="done-btn" onclick="resetApp()">Done</button>
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <div class="success-text">You sent <span id="success-amount"></span> to <span id="success-recipient"></span></div>
+                <div class="success-subtext">Available in their account instantly</div>
+                <div class="success-actions">
+                    <button class="share-btn">
+                        <span>📤</span> Share Receipt
+                    </button>
+                </div>
+                <button class="done-btn" onclick="resetApp()">Done</button>
+            </div>
+        </div>
+
+        <!-- Clear Display Toast -->
+        <div class="toast" id="clear-toast">
+            <span>✓ Display cleared</span>
+        </div>
+
+        <!-- Menu Modal -->
+        <div class="menu-modal" id="menu-modal">
+            <div class="menu-overlay" onclick="toggleMenu()"></div>
+            <div class="menu-content">
+                <div class="menu-header">
+                    <div class="menu-profile">
+                        <div class="avatar-circle large" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">F</div>
+                    </div>
+                    <div class="menu-info">
+                        <div class="menu-name">farmioboss</div>
+                        <div class="menu-handle">$farmioboss</div>
+                    </div>
+                </div>
+                <div class="menu-items">
+                    <div class="menu-item" onclick="toggleFullScreen()">
+                        <span>⛶</span>
+                        <span>Full Screen</span>
+                    </div>
+                    <div class="menu-item" onclick="clearDisplay()">
+                        <span>🗑️</span>
+                        <span>Clear Display</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>👤</span>
+                        <span>Profile</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>🔔</span>
+                        <span>Notifications</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>🔒</span>
+                        <span>Privacy</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>❓</span>
+                        <span>Support</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -512,22 +989,27 @@ body {
 
 
               <script>
-                              let currentAmount = 0;
+                              // State
+let currentAmount = 0;
 let currentRecipient = '';
 let currentBalance = 399199.00;
+let isFullScreen = false;
 
+// Contacts Data with unique avatar colors and initials
 const contacts = [
-    { name: "Sarah Johnson", handle: "$sarahj", imgPos: "0% 0%" },
-    { name: "Michael Chen", handle: "$mchen", imgPos: "50% 0%" },
-    { name: "Emma Williams", handle: "$emmaw", imgPos: "100% 0%" },
-    { name: "James Rodriguez", handle: "$jamesr", imgPos: "0% 50%" },
-    { name: "Olivia Brown", handle: "$oliviab", imgPos: "50% 50%" },
-    { name: "David Martinez", handle: "$davidm", imgPos: "100% 50%" },
-    { name: "Sophia Taylor", handle: "$sophiat", imgPos: "50% 100%" }
+    { name: "Sarah Johnson", handle: "$sarahj", initial: "S", color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+    { name: "Michael Chen", handle: "$mchen", initial: "M", color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" },
+    { name: "Emma Williams", handle: "$emmaw", initial: "E", color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)" },
+    { name: "James Rodriguez", handle: "$jamesr", initial: "J", color: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)" },
+    { name: "Olivia Brown", handle: "$oliviab", initial: "O", color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)" },
+    { name: "David Martinez", handle: "$davidm", initial: "D", color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)" },
+    { name: "Sophia Taylor", handle: "$sophiat", initial: "S", color: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)" },
+    { name: "Lucas Anderson", handle: "$lucasa", initial: "L", color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)" },
+    { name: "Mia Thomas", handle: "$miat", initial: "M", color: "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)" },
+    { name: "Ethan Jackson", handle: "$ethanj", initial: "E", color: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)" }
 ];
 
-const avatarSheetUrl = "https://image.qwenlm.ai/public_source/084f008e-b20c-49be-9128-bc9435f8d46c/164a45b9b-7898-48cb-8536-3cffe6468a3f.png";
-
+// DOM Elements
 const displayAmountEl = document.getElementById('display-amount');
 const payHeaderAmountEl = document.getElementById('pay-header-amount');
 const recipientInput = document.getElementById('recipient-input');
@@ -536,7 +1018,10 @@ const confirmPayBtn = document.getElementById('confirm-pay-btn');
 const appContainer = document.getElementById('app-container');
 const homeBalanceEl = document.getElementById('home-balance');
 const payBalanceEl = document.getElementById('pay-balance-display');
+const clearToast = document.getElementById('clear-toast');
+const menuModal = document.getElementById('menu-modal');
 
+// Initialize Contacts
 function initContacts() {
     const title = contactListEl.querySelector('.suggested-title');
     contactListEl.innerHTML = '';
@@ -548,8 +1033,8 @@ function initContacts() {
         item.onclick = () => selectContact(contact);
         
         const avatarHtml = `
-            <div class="contact-avatar">
-                <img src="${avatarSheetUrl}" style="object-position: ${contact.imgPos}; object-fit: cover;">
+            <div class="contact-avatar" style="background: ${contact.color}">
+                ${contact.initial}
             </div>
         `;
         
@@ -564,8 +1049,9 @@ function initContacts() {
     });
 }
 
+// Keypad Logic
 function appendNumber(num) {
-    if (currentAmount.toString().length > 10) return;
+    if (currentAmount.toString().replace('.', '').length > 10) return;
     
     if (currentAmount === 0 && num !== '.') {
         currentAmount = num;
@@ -582,7 +1068,7 @@ function deleteNumber() {
         currentAmount = 0;
     } else {
         str = str.slice(0, -1);
-        currentAmount = parseFloat(str);
+        currentAmount = parseFloat(str) || 0;
     }
     updateDisplay();
 }
@@ -602,8 +1088,12 @@ function updateDisplay() {
     checkPayButton();
 }
 
+// Navigation
 function goToPayment() {
-    if (currentAmount <= 0) return;
+    if (currentAmount <= 0) {
+        showToast('Enter an amount first');
+        return;
+    }
     
     document.getElementById('home-screen').classList.remove('active');
     document.getElementById('home-screen').classList.add('hidden');
@@ -611,8 +1101,21 @@ function goToPayment() {
     document.getElementById('payment-screen').classList.remove('hidden');
     document.getElementById('payment-screen').classList.add('active');
     
-    setTimeout(() => recipientInput.focus(), 300);
-    appContainer.classList.add('keyboard-active');
+    setTimeout(() => {
+        recipientInput.focus();
+        appContainer.classList.add('keyboard-active');
+    }, 300);
+}
+
+function goBack() {
+    appContainer.classList.remove('keyboard-active');
+    recipientInput.blur();
+    
+    document.getElementById('payment-screen').classList.remove('active');
+    document.getElementById('payment-screen').classList.add('hidden');
+    
+    document.getElementById('home-screen').classList.remove('hidden');
+    document.getElementById('home-screen').classList.add('active');
 }
 
 function handleRecipientInput() {
@@ -640,13 +1143,25 @@ function addNewContact() {
     const name = prompt("Enter contact name:");
     if (name) {
         const handle = "$" + name.toLowerCase().replace(/\s/g, '');
+        const initial = name.charAt(0).toUpperCase();
+        const colors = [
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+        ];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        
         const newContact = {
             name: name,
             handle: handle,
-            imgPos: "0% 0%"
+            initial: initial,
+            color: randomColor
         };
         contacts.unshift(newContact);
         initContacts();
+        showToast('Contact added successfully');
     }
 }
 
@@ -660,6 +1175,7 @@ function checkPayButton() {
 
 function processPayment() {
     appContainer.classList.remove('keyboard-active');
+    recipientInput.blur();
     
     document.getElementById('payment-screen').classList.remove('active');
     document.getElementById('payment-screen').classList.add('hidden');
@@ -685,9 +1201,11 @@ function showSuccess() {
     const recipientName = currentRecipient || recipientInput.value;
     document.getElementById('success-recipient').textContent = recipientName;
 
+    // Update Balance
     currentBalance -= currentAmount;
-    homeBalanceEl.textContent = '$' + currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2});
-    payBalanceEl.textContent = '$' + currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2});
+    const formattedBalance = '$' + currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2});
+    homeBalanceEl.textContent = formattedBalance;
+    payBalanceEl.textContent = formattedBalance;
 }
 
 function resetApp() {
@@ -706,6 +1224,101 @@ function resetApp() {
     document.getElementById('home-screen').classList.add('active');
 }
 
+// Clear Display Function
+function clearDisplay() {
+    // Clear URL without page reload
+    if (history.pushState) {
+        history.pushState('', document.title, window.location.pathname + window.location.search);
+    } else {
+        window.location.hash = '';
+    }
+    
+    // Clear any input fields
+    recipientInput.value = '';
+    currentRecipient = '';
+    
+    // Clear amount
+    currentAmount = 0;
+    updateDisplay();
+    
+    // Show toast
+    showToast('✓ Display cleared');
+    
+    // Close menu if open
+    toggleMenu();
+}
+
+// Full Screen Toggle
+function toggleFullScreen() {
+    if (!isFullScreen) {
+        if (appContainer.requestFullscreen) {
+            appContainer.requestFullscreen();
+        } else if (appContainer.webkitRequestFullscreen) {
+            appContainer.webkitRequestFullscreen();
+        } else if (appContainer.msRequestFullscreen) {
+            appContainer.msRequestFullscreen();
+        }
+        appContainer.classList.add('fullscreen');
+        isFullScreen = true;
+        showToast('✓ Full screen enabled');
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        appContainer.classList.remove('fullscreen');
+        isFullScreen = false;
+        showToast('✓ Full screen disabled');
+    }
+}
+
+// Listen for fullscreen change
+document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+        appContainer.classList.remove('fullscreen');
+        isFullScreen = false;
+    }
+});
+
+document.addEventListener('webkitfullscreenchange', () => {
+    if (!document.webkitFullscreenElement) {
+        appContainer.classList.remove('fullscreen');
+        isFullScreen = false;
+    }
+});
+
+// Toast Notification
+function showToast(message) {
+    clearToast.querySelector('span').textContent = message;
+    clearToast.classList.add('show');
+    
+    setTimeout(() => {
+        clearToast.classList.remove('show');
+    }, 2500);
+}
+
+// Menu Toggle
+function toggleMenu() {
+    menuModal.classList.toggle('active');
+}
+
+// Handle keyboard hide on outside tap
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.input-field') && !e.target.closest('.keyboard-spacer')) {
+        appContainer.classList.remove('keyboard-active');
+        recipientInput.blur();
+    }
+});
+
+// Prevent zoom on double tap
+document.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+}, { passive: false });
+
+// Initialize
 initContacts();
 
 
